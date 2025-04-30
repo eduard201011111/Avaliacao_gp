@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cadastro de Professor</title>
+</head>
+<body>
+    <h2>Cadastro de Professor</h2>
+    <form id="professorForm">
+        <label>Nome:</label>
+        <input type="text" name="nome" id="nome" required><br><br>
+        
+        <label>Email:</label>
+        <input type="email" name="email" id="email" required><br><br>
+
+        <label>Especialização:</label>
+        <input type="text" name="especializacao" id="especializacao" required><br><br>
+        
+        <button type="submit">Enviar</button>
+    </form>
+
+    <hr>
+
+    <h2>Lista de Professores</h2>
+    <form id="professorBusca">
+        <label>Nome do professor:</label>
+        <input type="text" name="nomeBusca" id="nomeBusca"><br><br>
+        <button type="submit">Carregar Professores</button>
+    </form>
+    
+    <ul id="listaProfessores"></ul>
+
+    <script>
+        function criarObjetoParaEnviar() {
+            return {
+                nome: document.getElementById("nome").value,
+                email: document.getElementById("email").value,
+                especializacao: document.getElementById("especializacao").value
+            };
+        }
+
+        async function postProfessor(event) {
+            event.preventDefault();
+            let formData = criarObjetoParaEnviar();
+
+            try {
+                let response = await fetch("http://localhost:8080/professor", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    alert("Erro do back-end " + response.status);
+                    return;
+                }
+
+                let data = await response.json();
+                alert("Sucesso: " + JSON.stringify(data));
+                getProfessores(); // recarrega lista
+            } catch (error) {
+                alert("Erro na requisição: " + error.message);
+            }
+        }
+
+        function criarListaDeProfessores(data) {
+            let lista = document.getElementById("listaProfessores");
+            lista.innerHTML = "";
+            data.forEach(professor => {
+                let item = document.createElement("li");
+                item.textContent = `ID: ${professor.id} - Nome: ${professor.nome} - Email: ${professor.email} - Especialização: ${professor.especializacao}`;
+                
+                // Botão Editar
+                let btnEditar = document.createElement("button");
+                btnEditar.textContent = "Editar";
+                btnEditar.style.marginLeft = "10px";
+                btnEditar.onclick = function() {
+                    window.open(`professorEdit.html?id=${professor.id}`, '_blank');
+                };
+                item.appendChild(btnEditar);
+
+                // Botão Deletar
+                let btnDeletar = document.createElement("button");
+                btnDeletar.textContent = "Deletar";
+                btnDeletar.style.marginLeft = "10px";
+                btnDeletar.onclick = function() {
+                    deletarProfessor(professor.id);
+                };
+                item.appendChild(btnDeletar);
+
+                lista.appendChild(item);
+            });
+        }
+
+        async function getProfessores(event) {
+            if (event) event.preventDefault();
+
+            let nomeBusca = document.getElementById("nomeBusca").value;
+
+            try {
+                let response = await fetch(`http://localhost:8080/professor?nome=${nomeBusca}`, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                });
+
+                if (!response.ok) {
+                    alert("Erro do back-end " + response.status);
+                    return;
+                }
+
+                let data = await response.json();
+                criarListaDeProfessores(data);
+            } catch (error) {
+                alert("Erro na requisição: " + error.message);
+            }
+        }
+
+        async function deletarProfessor(id) {
+            if (confirm("Tem certeza que deseja deletar este Professor?")) {
+                try {
+                    let response = await fetch(`http://localhost:8080/professor/${id}`, {
+                        method: "DELETE",
+                        headers: { "Content-Type": "application/json" },
+                    });
+
+                    if (!response.ok) {
+                        alert("Erro do back-end " + response.status);
+                        return;
+                    }
+
+                    alert("Professor deletado com sucesso!");
+                    getProfessores();
+                } catch (error) {
+                    alert("Erro na requisição: " + error.message);
+                }
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("professorForm").addEventListener("submit", postProfessor);
+            document.getElementById("professorBusca").addEventListener("submit", getProfessores);
+            getProfessores(); // já carrega lista
+        });
+    </script>
+</body>
+</html>

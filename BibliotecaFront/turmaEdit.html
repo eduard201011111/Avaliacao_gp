@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Turma</title>
+</head>
+<body>
+    <h2>Editar Turma</h2>
+    <form id="turmaForm">
+        <input type="hidden" id="turmaId">
+        
+        <label>Nome:</label>
+        <input type="text" id="nome" required><br><br>
+
+        <label>Sigla:</label>
+        <input type="text" id="sigla" required><br><br>
+
+        <label>Professor:</label>
+        <select id="professorSelect" required>
+            <option>Selecione...</option>
+        </select><br><br>
+
+        <button type="submit">Salvar</button>
+    </form>
+
+    <script>
+        // Pegar o ID da URL
+        function paramUrl(){
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get("id");
+
+            if (id) {
+                getTurmaPorId(id);
+            }
+        }
+
+        // Preencher os campos do formulário com a turma buscada
+        function preencherFormTurma(data){
+            document.getElementById("turmaId").value = data.id;
+            document.getElementById("nome").value = data.nome;
+            document.getElementById("sigla").value = data.sigla;
+            document.getElementById("professorSelect").value = data.professor?.id || "";
+        }
+
+        // Preencher o select com professores do banco
+        function criarCampoSelectProfessor(professores){
+            const select = document.getElementById("professorSelect");
+            professores.forEach(prof => {
+                const option = document.createElement("option");
+                option.value = prof.id;
+                option.textContent = prof.nome;
+                select.appendChild(option);
+            });
+        }
+
+        // Buscar professores do banco
+        async function getProfessores(){
+            try {
+                const res = await fetch("http://localhost:8080/professor");
+                if (!res.ok) throw new Error("Erro ao buscar professores");
+                const data = await res.json();
+                criarCampoSelectProfessor(data);
+            } catch (err) {
+                alert("Erro: " + err.message);
+            }
+        }
+
+        // Buscar turma por ID
+        async function getTurmaPorId(id){
+            try {
+                const res = await fetch(`http://localhost:8080/turma/${id}`);
+                if (!res.ok) throw new Error("Erro ao buscar turma");
+                const data = await res.json();
+                preencherFormTurma(data);
+            } catch (err) {
+                alert("Erro: " + err.message);
+            }
+        }
+
+        // Criar objeto turma para enviar
+        function criarObjetoTurma(){
+            return {
+                nome: document.getElementById("nome").value,
+                sigla: document.getElementById("sigla").value,
+                professor: {
+                    id: document.getElementById("professorSelect").value
+                }
+            };
+        }
+
+        // Enviar PUT para atualizar turma
+        async function putTurma(event){
+            event.preventDefault();
+            const id = document.getElementById("turmaId").value;
+            const turma = criarObjetoTurma();
+
+            try {
+                const res = await fetch(`http://localhost:8080/turma/${id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(turma)
+                });
+
+                if (!res.ok) throw new Error("Erro ao atualizar turma");
+
+                const data = await res.json();
+                alert("Turma atualizada com sucesso!");
+            } catch (err) {
+                alert("Erro: " + err.message);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            getProfessores();
+            paramUrl();
+            document.getElementById("turmaForm").addEventListener("submit", putTurma);
+        });
+    </script>
+</body>
+</html>
