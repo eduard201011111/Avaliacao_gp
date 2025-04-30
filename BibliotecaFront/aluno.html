@@ -25,7 +25,7 @@
     <ul id="listaAlunos"></ul>
 
     <script>
-        // ## Função para criar objeto do formulário
+        
         function criarObjetoAluno() {
             return {
                 nome: document.getElementById("nome").value,
@@ -34,7 +34,7 @@
             };
         }
 
-        // ## POST: cadastrar aluno
+    
         async function postAluno(event) {
             event.preventDefault();
 
@@ -60,7 +60,7 @@
             }
         }
 
-        // ## GET: buscar alunos
+
         async function getAlunos() {
             try {
                 let response = await fetch("http://localhost:8080/aluno", {
@@ -80,7 +80,7 @@
             }
         }
 
-        // ## Renderizar lista de alunos
+        
         function criarListaDeAlunos(data) {
             let lista = document.getElementById("listaAlunos");
             lista.innerHTML = "";
@@ -89,7 +89,7 @@
                 let item = document.createElement("li");
                 item.textContent = `ID: ${aluno.id} - Nome: ${aluno.nome} - CPF: ${aluno.cpf} - Idade: ${aluno.idade}`;
 
-                // Botão de deletar
+               
                 let btnDeletar = document.createElement("button");
                 btnDeletar.textContent = "Deletar";
                 btnDeletar.style.marginLeft = "10px";
@@ -102,7 +102,7 @@
             });
         }
 
-        // ## DELETE: deletar aluno
+        
         async function deletarAluno(id) {
             if (confirm("Tem certeza que deseja deletar este aluno?")) {
                 try {
@@ -124,7 +124,7 @@
             }
         }
 
-        // ## Eventos
+       
         document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("alunoForm").addEventListener("submit", postAluno);
             document.getElementById("carregarAlunos").addEventListener("click", getAlunos);

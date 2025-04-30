@@ -21,7 +21,7 @@
     </form>
 
     <script>
-        // Função para pegar o ID da URL
+        
         function paramUrl() {
             const params = new URLSearchParams(window.location.search);
             const id = params.get("id");
@@ -31,7 +31,7 @@
             }
         }
 
-        // Preenche os campos com os dados do aluno
+        
         function preencherFormulario(data) {
             document.getElementById("alunoId").value = data.id;
             document.getElementById("nome").value = data.nome;
@@ -39,7 +39,7 @@
             document.getElementById("idade").value = data.idade;
         }
 
-        // GET: Buscar aluno pelo ID
+        
         async function getAlunoPorId(id) {
             try {
                 const response = await fetch(`http://localhost:8080/aluno/${id}`, {
@@ -59,7 +59,7 @@
             }
         }
 
-        // Monta o objeto com os dados atualizados
+       
         function criarObjetoAluno() {
             return {
                 nome: document.getElementById("nome").value,
@@ -68,7 +68,7 @@
             };
         }
 
-        // PUT: Atualizar aluno
+        
         async function putAluno(event) {
             event.preventDefault();
             const id = document.getElementById("alunoId").value;
@@ -93,7 +93,7 @@
             }
         }
 
-        // Eventos ao carregar a página
+    
         document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("alunoForm").addEventListener("submit", putAluno);
             paramUrl();

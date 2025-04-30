@@ -56,7 +56,7 @@
 
                 let data = await response.json();
                 alert("Sucesso: " + JSON.stringify(data));
-                getProfessores(); // recarrega lista
+                getProfessores(); 
             } catch (error) {
                 alert("Erro na requisição: " + error.message);
             }
@@ -69,7 +69,7 @@
                 let item = document.createElement("li");
                 item.textContent = `ID: ${professor.id} - Nome: ${professor.nome} - Email: ${professor.email} - Especialização: ${professor.especializacao}`;
                 
-                // Botão Editar
+                
                 let btnEditar = document.createElement("button");
                 btnEditar.textContent = "Editar";
                 btnEditar.style.marginLeft = "10px";
@@ -78,7 +78,7 @@
                 };
                 item.appendChild(btnEditar);
 
-                // Botão Deletar
+               
                 let btnDeletar = document.createElement("button");
                 btnDeletar.textContent = "Deletar";
                 btnDeletar.style.marginLeft = "10px";
@@ -138,7 +138,7 @@
         document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("professorForm").addEventListener("submit", postProfessor);
             document.getElementById("professorBusca").addEventListener("submit", getProfessores);
-            getProfessores(); // já carrega lista
+            getProfessores(); 
         });
     </script>
 </body>

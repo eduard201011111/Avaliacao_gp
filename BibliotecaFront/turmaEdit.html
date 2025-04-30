@@ -23,7 +23,7 @@
     </form>
 
     <script>
-        // Pegar o ID da URL
+        
         function paramUrl(){
             const params = new URLSearchParams(window.location.search);
             const id = params.get("id");
@@ -33,7 +33,7 @@
             }
         }
 
-        // Preencher os campos do formulário com a turma buscada
+       
         function preencherFormTurma(data){
             document.getElementById("turmaId").value = data.id;
             document.getElementById("nome").value = data.nome;
@@ -41,7 +41,7 @@
             document.getElementById("professorSelect").value = data.professor?.id || "";
         }
 
-        // Preencher o select com professores do banco
+       
         function criarCampoSelectProfessor(professores){
             const select = document.getElementById("professorSelect");
             professores.forEach(prof => {
@@ -52,7 +52,7 @@
             });
         }
 
-        // Buscar professores do banco
+        
         async function getProfessores(){
             try {
                 const res = await fetch("http://localhost:8080/professor");
@@ -64,7 +64,7 @@
             }
         }
 
-        // Buscar turma por ID
+       
         async function getTurmaPorId(id){
             try {
                 const res = await fetch(`http://localhost:8080/turma/${id}`);
@@ -76,7 +76,7 @@
             }
         }
 
-        // Criar objeto turma para enviar
+       
         function criarObjetoTurma(){
             return {
                 nome: document.getElementById("nome").value,
@@ -87,7 +87,6 @@
             };
         }
 
-        // Enviar PUT para atualizar turma
         async function putTurma(event){
             event.preventDefault();
             const id = document.getElementById("turmaId").value;
