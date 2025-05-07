@@ -16,7 +16,6 @@ import java.util.Optional;
 
     public class AlunoController {
 
-
         @Autowired
         private AlunoService alunoService;
 
