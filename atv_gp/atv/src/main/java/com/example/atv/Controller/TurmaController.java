@@ -28,7 +28,7 @@ public class TurmaController{ //criação da classe
 
     //É a busca da turma por id, e também se encontrar vai retornar um ok e se caso não encontre seria não encontrado.
     @GetMapping("/{id}") //mapeia os http que são do get para um metodo controlador o id indica que a url tera um valor variavel no caso um id que seria um número, ele é importante  pois vai definir o endpoint da API
-    public ResponseEntity<TurmaDTO> getById(@PathVariable Long id){ //getById vai chamar um meyódo que vai acessar o banco e buscar o Id nesse caso seria o Id da turma, a relação com o service é que ele meio que faz uma separaçõa da lógica de negócio da lógica controle que no caso vem da controller
+    public ResponseEntity<TurmaDTO> getById(@PathVariable Long id){ //getById vai chamar um metodo que vai acessar o banco e buscar o Id nesse caso seria o Id da turma, a relação com o service é que ele meio que faz uma separaçõa da lógica de negócio da lógica controle que no caso vem da controller
         // tenta buscar a turma com id //pathvariable faz a busca por url
         Optional<TurmaDTO> turmaDTOOptional = turmaService.getById(id); //O optional é a representação de um valor que pode ou não pode estar presente, a vantagem dele é forçar a tratar a falta de valores que não estão sendo bem explicitos
         // tenta buscar a turma com id
@@ -96,3 +96,26 @@ public class TurmaController{ //criação da classe
 }
 
 
+//as respotas já estão no código mas para facilitar coloquei aqui embaixo também
+
+//Explique o que o @GetMapping faz e o que o "{id}" significa neste contexto. Qual é a importância dessa anotação e qual endpoint ela define para a aplicação?
+//R:mapeia os http que são do get para um metodo controlador o id indica que a url tera um valor variavel no caso um id que seria um número, o Id é um identificador único como o nome diz ele é um meio de você identificar algo, a anotação é importante  pois vai definir o endpoint da API, e ela define o get como endpoint
+
+
+//O que é a anotação @PathVariable? O que ela faz com o valor passado no caminho da URL (no caso, o id)? Explique a função do parâmetro id e sua relação com o método getById.
+//R:pathvariable faz a extraçõa da url, ele conecta o valor da url ao parametro id do método
+
+//O que significa o uso do Optional<ClienteDTO>? Qual a vantagem de usar Optional em vez de retornar um objeto diretamente?
+//R:O optional é a representação de um valor que pode ou não pode estar presente, a vantagem dele é forçar a tratar a falta de valores que não estão sendo bem explicitos
+
+//O que o método clienteService.getById(id) faz e como ele se relaciona com o serviço de cliente na aplicação?
+//R:getById vai chamar um metodo que vai acessar o banco e buscar o Id nesse caso seria o Id da turma, a relação com o service é que ele meio que faz uma separaçõa da lógica de negócio da lógica controle que no caso vem da controller
+
+//O que faz o método isPresent() e como ele verifica se o valor dentro do Optional está presente? Como isso afeta o fluxo do código?
+//R:o isPresent vai verificar se o optional vai ter um valor(se encontrou uma turma), ele vai afetar o fluxo se a turma existir ele vai retornar que deu certo se não der certo ele retorna erro
+
+//Explique o que acontece quando o Optional contém um valor. O que o ResponseEntity.ok() faz e qual é a importância do get()?
+//R:o get vai extrair o objeto que está dentro e o .ok vai criar a resposta http com o código ok
+
+//O que ocorre quando o Optional está vazio? O que faz ResponseEntity.notFound().build() e qual é a resposta HTTP gerada nesse caso?
+//R:Se não encontrar vai retornar erro, a importância é que vai indicar que o recurso buscado não foi encontrado, ele retorna o código de número 404
