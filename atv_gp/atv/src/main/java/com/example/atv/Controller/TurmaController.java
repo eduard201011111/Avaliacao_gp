@@ -28,7 +28,7 @@ public class TurmaController{ //criação da classe
 
     //É a busca da turma por id, e também se encontrar vai retornar um ok e se caso não encontre seria não encontrado.
     @GetMapping("/{id}")
-    public ResponseEntity<TurmaDTO> getById(@PathVariable Long id){ //tenta buscar a turma com id
+    public ResponseEntity<TurmaDTO> getById(@PathVariable Long id){ //tenta buscar a turma com id //pathvariable faz a busca por url
         Optional<TurmaDTO> turmaDTOOptional = turmaService.getById(id); //tenta buscar a turma com id
         if(turmaDTOOptional.isPresent()){ //se a turma existir vai retornar a busca como sucesso
             return ResponseEntity.ok(turmaDTOOptional.get()); //se a turma existir vai retornar a busca como sucesso
@@ -41,7 +41,7 @@ public class TurmaController{ //criação da classe
     //o json será convertido para turmaDTO
     //e se criar a turma retornará meio que um ok(que deu certo a criação)
     @PostMapping
-    public ResponseEntity<TurmaDTO> create(@RequestBody TurmaDTO turmaDTO){
+    public ResponseEntity<TurmaDTO> create(@RequestBody TurmaDTO turmaDTO){ //requestbody faz o mapeamento das requisições http
         TurmaDTO turmaDTOSave = turmaService.createTurma(turmaDTO); //chamar o turmaService para criar a turma
         return ResponseEntity.status(HttpStatus.CREATED).body(turmaDTOSave); //vai retornar os dados da turma criada
     }
@@ -50,7 +50,7 @@ public class TurmaController{ //criação da classe
     //Atualizar a turma pelo id
     //Pode retornar se deu certo a busca, e se não der certo retorna o erro
     @PutMapping("/{id}")
-    public ResponseEntity<TurmaDTO> update(@PathVariable Long id, @RequestBody TurmaDTO turmaDTO){
+    public ResponseEntity<TurmaDTO> update(@PathVariable Long id, @RequestBody TurmaDTO turmaDTO){//pathvariable faz a busca por url  //requestbody faz o mapeamento das requisições http
         Optional<TurmaDTO> turmaDTOOptional = turmaService.updateTurma(id, turmaDTO); //chamar o turmaService para atualizar a turma
         if(turmaDTOOptional.isPresent()){
             return ResponseEntity.ok(turmaDTOOptional.get()); //se a atualização da turma der certo vai retornar ok
@@ -61,7 +61,7 @@ public class TurmaController{ //criação da classe
 
     //criação do endpoint PUT Adicionar um aluno a turma
     @PutMapping("/{id}/aluno-add/{idAluno}")
-    public ResponseEntity<String> addAlunoTurma(@PathVariable Long id, @PathVariable Long idAluno){
+    public ResponseEntity<String> addAlunoTurma(@PathVariable Long id, @PathVariable Long idAluno){//pathvariable faz a busca por url
         if(turmaService.addAlunoTurma(id, idAluno)){ //é a tentativa de adicionara o aluno a turma
             return ResponseEntity.ok("Aluno adicionado!"); //e aqui retorna um ok caso consiga
         }else {
@@ -71,7 +71,7 @@ public class TurmaController{ //criação da classe
 
     //criação do endpoint PUT para Remover um aluno da turma
     @PutMapping("/{id}/aluno-remove/{idAluno}")
-    public ResponseEntity<String> removeAlunoTurma(@PathVariable Long id, @PathVariable Long idAluno){
+    public ResponseEntity<String> removeAlunoTurma(@PathVariable Long id, @PathVariable Long idAluno){ //pathvariable faz a busca por url
         if(turmaService.removeAlunoTurma(id, idAluno)){ //onde vai remover o aluno da turma
             return ResponseEntity.ok("Aluno retirado da turma"); //se caso der certo, vai retornar a frase 'Aluno retirado da Turma'
         }else {
@@ -81,7 +81,7 @@ public class TurmaController{ //criação da classe
 
     //Criação do DELETE para excluir uma turma
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id){ //pathvariable faz a busca por url
         if(turmaService.delete(id)){  //tenta fazer a remoção da turma pelo id que vai ser fornecido
             return ResponseEntity.noContent().build(); //aqui é caso der certo
         }else {
