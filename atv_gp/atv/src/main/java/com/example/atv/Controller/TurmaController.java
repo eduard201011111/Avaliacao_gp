@@ -27,10 +27,12 @@ public class TurmaController{ //criação da classe
     }
 
     //É a busca da turma por id, e também se encontrar vai retornar um ok e se caso não encontre seria não encontrado.
-    @GetMapping("/{id}")
-    public ResponseEntity<TurmaDTO> getById(@PathVariable Long id){ //tenta buscar a turma com id //pathvariable faz a busca por url
-        Optional<TurmaDTO> turmaDTOOptional = turmaService.getById(id); //tenta buscar a turma com id
-        if(turmaDTOOptional.isPresent()){ //se a turma existir vai retornar a busca como sucesso
+    @GetMapping("/{id}") //mapeia os http que são do get para um metodo controlador o id indica que a url tera um valor variavel no caso um id que seria um número, ele é importante  pois vai definir o endpoint da API
+    public ResponseEntity<TurmaDTO> getById(@PathVariable Long id){ //getById vai chamar um meyódo que vai acessar o banco e buscar o Id nesse caso seria o Id da turma, a relação com o service é que ele meio que faz uma separaçõa da lógica de negócio da lógica controle que no caso vem da controller
+        // tenta buscar a turma com id //pathvariable faz a busca por url
+        Optional<TurmaDTO> turmaDTOOptional = turmaService.getById(id); //O optional é a representação de um valor que pode ou não pode estar presente, a vantagem dele é forçar a tratar a falta de valores que não estão sendo bem explicitos
+        // tenta buscar a turma com id
+        if(turmaDTOOptional.isPresent()){ //o isPresent vai verificar se o optional vai ter um valor(se encontrou uma turma), ele vai afetar o fluxo se a turma existir ele vai retornar que deu certo se não der certo ele retorna erro
             return ResponseEntity.ok(turmaDTOOptional.get()); //se a turma existir vai retornar a busca como sucesso
         }else {
             return ResponseEntity.notFound().build(); // e aqui se não existir vai retornar o famoso not found
@@ -41,7 +43,8 @@ public class TurmaController{ //criação da classe
     //o json será convertido para turmaDTO
     //e se criar a turma retornará meio que um ok(que deu certo a criação)
     @PostMapping
-    public ResponseEntity<TurmaDTO> create(@RequestBody TurmaDTO turmaDTO){ //requestbody faz o mapeamento das requisições http
+    public ResponseEntity<TurmaDTO> create(@RequestBody TurmaDTO turmaDTO){ //responseentity vai apresentar uma resposta HTTP, se utiliza bastante pois ele envolve o objeto TurmaDTO para retornar dados da turma junto com o número do código HTTP
+        // requestbody faz o mapeamento das requisições http
         TurmaDTO turmaDTOSave = turmaService.createTurma(turmaDTO); //chamar o turmaService para criar a turma
         return ResponseEntity.status(HttpStatus.CREATED).body(turmaDTOSave); //vai retornar os dados da turma criada
     }
@@ -50,12 +53,14 @@ public class TurmaController{ //criação da classe
     //Atualizar a turma pelo id
     //Pode retornar se deu certo a busca, e se não der certo retorna o erro
     @PutMapping("/{id}")
-    public ResponseEntity<TurmaDTO> update(@PathVariable Long id, @RequestBody TurmaDTO turmaDTO){//pathvariable faz a busca por url  //requestbody faz o mapeamento das requisições http
+    public ResponseEntity<TurmaDTO> update(@PathVariable Long id, @RequestBody TurmaDTO turmaDTO){//pathvariable faz a extraçõa da url, ele conecta o valor da url ao parametro id do método
+        // requestbody faz o mapeamento das requisições http
         Optional<TurmaDTO> turmaDTOOptional = turmaService.updateTurma(id, turmaDTO); //chamar o turmaService para atualizar a turma
         if(turmaDTOOptional.isPresent()){
-            return ResponseEntity.ok(turmaDTOOptional.get()); //se a atualização da turma der certo vai retornar ok
+            return ResponseEntity.ok(turmaDTOOptional.get()); //o get vai extrair o objeto que está dentro e o .ok vai criar a resposta http com o código ok
+            // se a atualização da turma der certo vai retornar ok
         }else{
-            return ResponseEntity.notFound().build(); //se não encontrar vai retornar erro
+            return ResponseEntity.notFound().build(); //se não encontrar vai retornar erro, a importância é que vai indicar que o recurso buscado não foi encontrado, ele retorna o código de número 404
         }
     }
 
